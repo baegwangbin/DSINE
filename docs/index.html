@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DSINE</title>
+    <link rel="shortcut icon" type="image/jpg" href="img/logo.ico" />
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.css">
+    <link rel="stylesheet" href="./css/twentytwenty.css">
+    <script src="https://kit.fontawesome.com/49f46e7382.js" crossorigin="anonymous"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+      </script>
+      <script type="text/javascript"
+        src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+      </script>
+</head>
+
+<body>
+    <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+        <div class="container is-max-desktop">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="https://www.imperial.ac.uk/dyson-robotics-lab/">
+                <img src="img/logo/logo-dyson.png" alt="Dyson Robotics Lab" style="height: 2.0rem;">
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="https://www.imperial.ac.uk/">
+                    <img src="img/logo/logo-imperial.png" alt="Imperial College London" style="height: 1.0rem;">
+                </a>
+            </div>
+            <div class="navbar-end">
+                <a class="navbar-item" href="https://cvpr.thecvf.com/Conferences/2024">
+                    <img src="img/logo/logo-cvpr.png" alt="CVPR 2024" style="height: 2.0rem;">
+                </a>
+            </div>
+        </div>
+    </div>
+    </nav>
+    <section class="section">
+        <div class="container is-max-desktop">
+            <center>
+                <img src="img/dsine/logo_with_outline.png" style="width:50%" />
+            </center>
+            <h1 class="title is-2 is-size-3-mobile is-spaced has-text-centered">
+                Rethinking Inductive Biases for Surface Normal Estimation
+            </h1>
+            <p class="subtitle is-5 has-text-centered has-text-grey">
+                CVPR 2024
+            </p>
+            <p class="subtitle is-6 has-text-centered authors mt-5" style="line-height: 1.5;">
+                <span>
+                    <a href="https://www.baegwangbin.com">Gwangbin&nbsp;Bae</a>
+                </span>
+                <span>
+                    <a href="https://www.doc.ic.ac.uk/~ajd/">Andrew&nbsp;J.&nbsp;Davison</a>
+                </span>
+            </p>
+            <p class="subtitle is-6 has-text-centered authors mt-5" style="line-height: 1.5;">
+                Dyson Robotics Lab, Imperial College London
+            </p>
+        </div>
+        <div class="container is-max-desktop has-text-centered mt-5">
+            <a href="https://github.com/baegwangbin/DSINE/raw/main/paper.pdf" class="button is-rounded is-link is-light mr-2">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper</span>
+            </a>
+            <a href="https://arxiv.org/" class="button is-rounded is-link is-light mr-2">
+                <span class="icon"><i class="ai ai-arxiv"></i></span>
+                <span>arXiv (coming soon)</span>
+            </a>
+            <a href="https://github.com/baegwangbin/DSINE" class="button is-rounded is-link is-light">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Code</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="section pt-0">
+        <div class="container is-max-desktop">
+            <h1 class="title is-4">
+                TL;DR
+            </h1>
+            <div class="content has-text-justified-desktop">
+                <p>
+                    <ul>
+                        <li>We discuss the inductive biases needed for surface normal estimation and propose to (1) utilize the <b>per-pixel ray direction</b> and (2) estimate the surface normals by <b>learning the relative rotation between nearby pixels</b>.</li>
+                        <li>With the right inductive biases, models can be trained with much less number of images. Our model is trained only on <b>160K images, for 12 hours, on a single NVIDIA 4090 GPU</b>. 
+                            In comparison, <a href="https://docs.omnidata.vision/pretrained.html#Pretrained-Models/">Omnidata V2</a> (which is based on <a href="https://github.com/isl-org/DPT">DPT</a> architecture) is trained on <b>12M images, for 2 weeks, on four NVIDIA V100 GPUs</b>.
+                        </li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section pt-0">
+        <div class="container is-max-desktop">
+            <h1 class="title is-4">
+                Demo
+            </h1>
+            <div class="content has-text-justified-desktop">
+                <p>The input videos are from <a href="https://davischallenge.org/">DAVIS</a>. The predictions are made per-frame.</p>
+            </div>
+            <iframe style="display: block; margin: auto;" width="768" height="432" src="https://www.youtube.com/embed/8_tCSWVK4VM" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </section>
+    <section class="section pt-0">
+        <div class="container is-max-desktop">
+            <h1 class="title is-4">
+                Motivation
+            </h1>
+            <div class="content has-text-justified-desktop">
+                <p>In recent years, the usefulness of surface normal estimation methods has been demonstrated in various areas of computer vision, including 
+                    <a href="https://github.com/lllyasviel/ControlNet-v1-1-nightly">image generation</a>, 
+                    <a href="https://sites.google.com/view/monograsp">object grasping</a>, 
+                    <a href="https://shikun.io/projects/prismer">multi-task learning</a>, 
+                    <a href="https://baegwangbin.github.io/IronDepth/">depth estimation</a>,
+                    <a href="https://nicer-slam.github.io/">simultaneous localization and mapping</a>,
+                    <a href="https://www.ollieboyne.com/FOUND/">human body shape estimation</a>,
+                    and <a href="https://florianlanger.github.io/SPARC/">CAD model alignment</a>.
+                    However, despite the growing demand for accurate surface normal estimation models, there has been little discussion on the right inductive biases needed for the task.</p>
+            </div>
+        </div>
+    </section>
+    <section class="section pt-0">
+        <div class="container is-max-desktop">
+            <h1 class="title is-4">
+                What inductive biases do we need for surface normal estimation?
+            </h1>
+            <div class="content has-text-justified-desktop">
+                <p>In this paper, we propose to use the <b>per-pixel ray direction</b> as an additional input to the network. </p>
+            </div>
+            <center>
+                <img src="img/dsine/motivation-1.gif" style="width:50%"/>
+            </center>
+            <div class="content has-text-justified-desktop">
+                <p>Ray direction provides an important cue for the pixels near <b>occluding boundaries</b> as the normal should be <b>perpendicular to the ray</b>.</p>
+            </div>
+            <center>
+                <img src="img/dsine/motivation-2.gif" style="width:50%"/>
+            </center>
+            <div class="content has-text-justified-desktop">
+                <p>
+                    It also gives us the range of normals that would be <b style="color:blue">visible</b>, effectively <b>halving the output space</b>. We incorporate such a bias by introducing a <b>Ray ReLU</b> activation.
+                </p>
+                <p>
+                    We also propose to recast surface normal estimation as <b>rotation estimation</b>. At first, this may sound like we are over-complicating the task. 
+                    Why should we estimate $\mathbf{R} \in SO(3)$, which has <b>three</b> degrees of freedom, instead of estimating $\mathbf{n} \in S^2$, which only has <b>two</b> degrees of freedom?
+                </p> 
+                <p>
+                    Let's start by parameterizing $\mathbf{R}$ using the <b>axis-angle</b> representation
+                </p>
+            </div>
+            <center>
+                <p>$$\boldsymbol{\theta} = \theta \boldsymbol{e}$$</p>
+            </center>
+            <div class="content has-text-justified-desktop">
+                <p>
+                    where a unit vector $\textbf{e}$ represents the <b>axis</b> of rotation and $\theta$ is the <b>angle</b> of rotation.
+                </p>
+            </div>
+            <center>
+                <img src="img/dsine/motivation-3.gif" style="width:50%"/>
+            </center>
+            <div class="content has-text-justified-desktop">
+                <p>
+                    For most pairs of pixels, $\theta$ would simply be $0$ or $\pm 90^\circ$. Plus, the angle between the normals, unlike the normals themselves, are <b>independent of the viewing direction</b>, making it easier to learn.
+                </p>
+                <p>
+                    Finding the <b>axis</b> of rotation is also straightforward. When two (locally) flat surfaces intersect at a line, the normals rotate around that intersection. As the image intensity generally changes sharply near such intersections, the task can be as simple as edge detection.
+                </p>
+            </div>
+            <center>
+                <img src="img/dsine/motivation-4.gif" style="width:50%"/>
+            </center>
+            <div class="content has-text-justified-desktop">
+                <p>
+                    Modeling the relative change in surface normals is not just useful for flat surfaces. In this example, the relative angle between the normals of the yellow pixels can be inferred from that of the red pixels by assuming circular symmetry.
+                </p>
+                <p>
+                    Please refer to our paper for additional information on how to incorporate the aforementioned inductive biases.
+                </p>
+            </div>
+        </div>
+    </section>
+    <section class="section pt-0">
+        <div class="container is-max-desktop">
+            <h1 class="title is-4">
+                Results
+            </h1>
+            <div class="content has-text-justified-desktop">
+                <p>Here we provide a comparison between <a href="https://docs.omnidata.vision/pretrained.html#Pretrained-Models/">Omnidata V2</a> (left) and ours (right). 
+                    The input images (shown at the top-left corner) are in-the-wild images from the <a href="https://oasis.cs.princeton.edu/">OASIS</a> dataset.
+                    Despite being trained on significantly fewer images, our model shows stronger generalization capability.
+                </p>
+            </div>
+            <div class="block">
+                <button class="btn-split add-r-button selected" id="button-r00">00</button>
+                <button class="btn-split add-r-button" id="button-r01">01</button>
+                <button class="btn-split add-r-button" id="button-r02">02</button>
+                <button class="btn-split add-r-button" id="button-r03">03</button>
+                <button class="btn-split add-r-button" id="button-r04">04</button>
+                <button class="btn-split add-r-button" id="button-r05">05</button>
+                <button class="btn-split add-r-button" id="button-r06">06</button>
+                <button class="btn-split add-r-button" id="button-r07">07</button>
+                <button class="btn-split add-r-button" id="button-r08">08</button>
+                <button class="btn-split add-r-button" id="button-r09">09</button>
+                <button class="btn-split add-r-button" id="button-r10">10</button>
+                <button class="btn-split add-r-button" id="button-r11">11</button>
+                <button class="btn-split add-r-button" id="button-r12">12</button>
+                <button class="btn-split add-r-button" id="button-r13">13</button>
+                <button class="btn-split add-r-button" id="button-r14">14</button>
+                <button class="btn-split add-r-button" id="button-r15">15</button>
+                <button class="btn-split add-r-button" id="button-r16">16</button>
+                <button class="btn-split add-r-button" id="button-r17">17</button>
+            </div>
+            <div class="block" id="container1" style="border-radius: 0rem; touch-action: pan-y;">
+                <img id="dsine-omni" src="img/results/00_omni.png" alt="" />
+                <img id="dsine-ours" src="img/results/00_ours.png" alt="" />
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section pt-0">
+        <div class="container is-max-desktop">
+            <h1 class="title is-4">
+                Acknowledgement
+            </h1>
+            <div class="content has-text-justified-desktop">
+                <p>Research presented in this paper was supported by Dyson Technology Ltd. 
+                    The authors would like to thank
+                    <a href="https://shikun.io/" target="_blank" rel="noopener noreferrer"> Shikun Liu</a>, 
+                    <a href="https://edexheim.github.io/" target="_blank" rel="noopener noreferrer"> Eric Dexheimer</a>, 
+                    <a href="https://scholar.google.com/citations?user=aQSQwcUAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer"> Callum Rhodes</a>, 
+                    <a href="https://aalok.uk/" target="_blank" rel="noopener noreferrer"> Aalok Patwardhan</a>,
+                    <a href="https://rmurai.co.uk/" target="_blank" rel="noopener noreferrer"> Riku Murai</a>,
+                    <a href="https://muskie82.github.io/" target="_blank" rel="noopener noreferrer"> Hidenobu Matsuki</a>,
+                    and members of the Dyson Robotics Lab for insightful feedback and discussions.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section pt-0">
+        <div class="container is-max-desktop">
+            <h1 class="title is-4">
+                BibTeX
+            </h1>
+            <pre>
+@inproceedings{bae2024dsine,
+    title={Rethinking Inductive Biases for Surface Normal Estimation},
+    author={Gwangbin Bae and Andrew J. Davison},
+    booktitle={IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    year={2024}
+}
+</pre>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <img src="img/logo/logo-dyson.png" class="mt-5" alt="Dyson Robotics Lab, Imperial College London" style="height: 2rem;">
+            </p>
+        </div>
+    </footer>
+
+    
+    <script src="main.js"></script>
+    <script src="./js/jquery-3.7.1.min.js"></script>
+    <script src="./js/jquery.twentytwenty.js"></script>
+    <script src="./js/jsquery.event.move.js"></script>
+    <!-- <script src="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.js"></script> -->
+    <script>
+        const btn_gui = document.querySelectorAll('.btn-gui');
+        btn_gui.forEach(button => {
+            button.addEventListener('click', () => {
+                btn_gui.forEach(b => b.classList.remove('selected'));
+                button.classList.add('selected');
+            });
+        });
+        const btn_split = document.querySelectorAll('.btn-split');
+        btn_split.forEach(button => {
+            button.addEventListener('click', () => {
+                btn_split.forEach(b => b.classList.remove('selected'));
+                button.classList.add('selected');
+            });
+        });
+    
+        const r00 = document.getElementById('button-r00');
+        const r01 = document.getElementById('button-r01');
+        const r02 = document.getElementById('button-r02');
+        const r03 = document.getElementById('button-r03');
+        const r04 = document.getElementById('button-r04');
+        const r05 = document.getElementById('button-r05');
+        const r06 = document.getElementById('button-r06');
+        const r07 = document.getElementById('button-r07');
+        const r08 = document.getElementById('button-r08');
+        const r09 = document.getElementById('button-r09');
+        const r10 = document.getElementById('button-r10');
+        const r11 = document.getElementById('button-r11');
+        const r12 = document.getElementById('button-r12');
+        const r13 = document.getElementById('button-r13');
+        const r14 = document.getElementById('button-r14');
+        const r15 = document.getElementById('button-r15');
+        const r16 = document.getElementById('button-r16');
+        const r17 = document.getElementById('button-r17');
+    
+        const omni = document.getElementById('dsine-omni');
+        const ours = document.getElementById('dsine-ours');
+
+        r00.addEventListener('click', () => {
+            omni.src = 'img/results/00_omni.png';
+            ours.src = 'img/results/00_ours.png';
+        });
+
+        r01.addEventListener('click', () => {
+            omni.src = 'img/results/01_omni.png';
+            ours.src = 'img/results/01_ours.png';
+        });
+
+        r02.addEventListener('click', () => {
+            omni.src = 'img/results/02_omni.png';
+            ours.src = 'img/results/02_ours.png';
+        });
+
+        r03.addEventListener('click', () => {
+            omni.src = 'img/results/03_omni.png';
+            ours.src = 'img/results/03_ours.png';
+        });
+
+        r04.addEventListener('click', () => {
+            omni.src = 'img/results/04_omni.png';
+            ours.src = 'img/results/04_ours.png';
+        });
+
+        r05.addEventListener('click', () => {
+            omni.src = 'img/results/05_omni.png';
+            ours.src = 'img/results/05_ours.png';
+        });
+
+        r06.addEventListener('click', () => {
+            omni.src = 'img/results/06_omni.png';
+            ours.src = 'img/results/06_ours.png';
+        });
+
+        r07.addEventListener('click', () => {
+            omni.src = 'img/results/07_omni.png';
+            ours.src = 'img/results/07_ours.png';
+        });
+
+        r08.addEventListener('click', () => {
+            omni.src = 'img/results/08_omni.png';
+            ours.src = 'img/results/08_ours.png';
+        });
+
+        r09.addEventListener('click', () => {
+            omni.src = 'img/results/09_omni.png';
+            ours.src = 'img/results/09_ours.png';
+        });
+
+        r10.addEventListener('click', () => {
+            omni.src = 'img/results/10_omni.png';
+            ours.src = 'img/results/10_ours.png';
+        });
+
+        r11.addEventListener('click', () => {
+            omni.src = 'img/results/11_omni.png';
+            ours.src = 'img/results/11_ours.png';
+        });
+
+        r12.addEventListener('click', () => {
+            omni.src = 'img/results/12_omni.png';
+            ours.src = 'img/results/12_ours.png';
+        });
+
+        r13.addEventListener('click', () => {
+            omni.src = 'img/results/13_omni.png';
+            ours.src = 'img/results/13_ours.png';
+        });
+
+        r14.addEventListener('click', () => {
+            omni.src = 'img/results/14_omni.png';
+            ours.src = 'img/results/14_ours.png';
+        });
+
+        r15.addEventListener('click', () => {
+            omni.src = 'img/results/15_omni.png';
+            ours.src = 'img/results/15_ours.png';
+        });
+
+        r16.addEventListener('click', () => {
+            omni.src = 'img/results/16_omni.png';
+            ours.src = 'img/results/16_ours.png';
+        });
+
+        r17.addEventListener('click', () => {
+            omni.src = 'img/results/17_omni.png';
+            ours.src = 'img/results/17_ours.png';
+        });
+
+        $(function () {
+            $("#container1").twentytwenty({
+                no_overlay: true
+            });
+        });
+    </script>    
+
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+        // Check if there are any navbar burgers
+        if ($navbarBurgers.length > 0) {
+
+            // Add a click event on each of them
+            $navbarBurgers.forEach(el => {
+                el.addEventListener('click', () => {
+
+                    // Get the target from the "data-target" attribute
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target);
+
+                    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+
+                });
+            });
+        }
+    });
+</script>
+</html>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">

@@ -11,7 +11,7 @@ Official implementation of the paper
 >
 > CVPR 2024 (to appear)
 >
-> <a href="https://baegwangbin.com" target="_blank">Gwangbin Bae</a> and > <a href="https://www.doc.ic.ac.uk/~ajd/" target="_blank">Andrew J. Davison</a>
+> <a href="https://baegwangbin.com" target="_blank">Gwangbin Bae</a> and <a href="https://www.doc.ic.ac.uk/~ajd/" target="_blank">Andrew J. Davison</a>
 >
 > <a href="https://github.com/baegwangbin/DSINE/raw/main/paper.pdf" target="_blank">[paper.pdf]</a>
 <a href="https://arxiv.org/" target="_blank">[arXiv (coming soon)]</a> 

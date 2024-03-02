@@ -12,12 +12,16 @@
     <link rel="stylesheet" href="https://unpkg.com/image-compare-viewer/dist/image-compare-viewer.min.css">
     <link rel="stylesheet" href="./css/twentytwenty.css">
     <script src="https://kit.fontawesome.com/49f46e7382.js" crossorigin="anonymous"></script>
+    <script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
     <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-      </script>
-      <script type="text/javascript"
-        src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-      </script>
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          processEscapes: true
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 </head>
 
 <body>
@@ -110,7 +114,7 @@
                 Demo
             </h1>
             <div class="content has-text-justified-desktop">
-                <p>The input videos are from <a href="https://davischallenge.org/" target="_blank" rel="noopener noreferrer">DAVIS</a>. The predictions are made per-frame.</p>
+                <p>The input videos are from <a href="https://davischallenge.org/" target="_blank" rel="noopener noreferrer">DAVIS</a>. The predictions are made per-frame (we recommend watching in 4K).</p>
             </div>
             <iframe style="display: block; margin: auto;" width="768" height="432" src="https://www.youtube.com/embed/8_tCSWVK4VM" frameborder="0" allowfullscreen></iframe>
         </div>

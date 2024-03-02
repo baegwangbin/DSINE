@@ -34,7 +34,6 @@ conda create --name DSINE python=3.10
 conda activate DSINE
 
 conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
-conda install opencv
 python -m pip install geffnet
 python -m pip install glob2
 ```

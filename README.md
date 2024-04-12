@@ -9,7 +9,7 @@ Official implementation of the paper
 
 > **Rethinking Inductive Biases for Surface Normal Estimation**
 >
-> CVPR 2024
+> CVPR 2024 [oral]
 >
 > <a href="https://baegwangbin.com" target="_blank">Gwangbin Bae</a> and <a href="https://www.doc.ic.ac.uk/~ajd/" target="_blank">Andrew J. Davison</a>
 >
@@ -41,7 +41,18 @@ python -m pip install glob2
 
 Then, download the model weights from <a href="https://drive.google.com/drive/folders/1t3LMJIIrSnCGwOEf53Cyg0lkSXd3M4Hm?usp=drive_link" target="_blank">this link</a> and save it under `./checkpoints/`.
 
-## Use torch hub to predcit normal
+## Test on images
+
+* Run `python test.py` to generate predictions for the images under `./samples/img/`. The result will be saved under `./samples/output/`.
+* Our model assumes known camera intrinsics, but providing approximate intrinsics still gives good results. For some images in `./samples/img/`, the corresponding camera intrinsics (fx, fy, cx, cy - assuming perspective camera with no distortion) is provided as a `.txt` file. If such a file does not exist, the intrinsics will be approximated, by assuming $60^\circ$ field-of-view.
+
+## Additional instructions
+
+If you want to make contributions to this repo, please make a pull request and add instructions in the following format.
+
+<details>
+<summary><b>Using torch hub to predict normal</b> (contribution by <a href="https://github.com/hugoycj" target="_blank">hugoycj</a>)</summary>
+
 ```
 import torch
 import cv2
@@ -66,15 +77,28 @@ normal = cv2.cvtColor(normal, cv2.COLOR_RGB2BGR)
 # Save the output normal map to a file
 cv2.imwrite(args.output, normal)
 ```
+
 If the network is unavailable to retrieve weights, you can use local weights for torch hub as shown below:
+
 ```
 normal_predictor = torch.hub.load("hugoycj/DSINE-hub", "DSINE", local_file_path='./checkpoints/dsine.pt', trust_repo=True)
 ```
+</details>
 
-## Test on images
 
-* Run `python test.py` to generate predictions for the images under `./samples/img/`. The result will be saved under `./samples/output/`.
-* Our model assumes known camera intrinsics, but providing approximate intrinsics still gives good results. For some images in `./samples/img/`, the corresponding camera intrinsics (fx, fy, cx, cy - assuming perspective camera with no distortion) is provided as a `.txt` file. If such a file does not exist, the intrinsics will be approximated, by assuming $60^\circ$ field-of-view.
+<details>
+<summary><b>Generating ground truth surface normals</b></summary>
+We provide the code used to generate the ground truth surface normals from ground truth depth maps. See <code>data/d2n/README.md</code> for more detail.
+</details>
+
+
+<details>
+<summary><b>About the coordinate system</b></summary>
+We use the right-handed coordinate system with (X, Y, Z) = (right, down, front). An important thing to note is that both the ground truth normals and our prediction are the <b>outward normals</b>. For example, in the case of a fronto-parallel wall facing the camera, the normals would be (0, 0, 1), not (0, 0, -1). If you instead need to use the <b>inward normals</b>, please do <code>normals = -normals</code>.
+</details>
+
+
+ 
 
 ## Citation
 

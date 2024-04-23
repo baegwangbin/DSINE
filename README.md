@@ -71,7 +71,6 @@ python -m pip install vidgear         # needed only for demo on YouTube videos
 python -m pip install yt_dlp          # needed only for demo on YouTube videos
 python -m pip install mss             # needed only for demo on screen capture
 ```
-</details>
 
 Download the evaluation datasets (`dsine_eval.zip`) from <a href="https://drive.google.com/drive/folders/1t3LMJIIrSnCGwOEf53Cyg0lkSXd3M4Hm?usp=drive_link" target="_blank">this link</a>. 
 
@@ -118,6 +117,8 @@ python test.py ./experiments/exp001_cvpr2024/dsine.txt --mode https://www.youtub
 For each input option, there are some additional parameters. See `projects/dsine/test.py` for more information.
 
 You can also try building your own real-time demo. Please see [this notebook](https://github.com/baegwangbin/DSINE/blob/main/notes/real_time_demo.ipynb) for more information.
+</details>
+
 
 <details>
 <summary><b>Step 3. Train DSINE</b></summary>
@@ -172,12 +173,8 @@ Lastly, you can should `train.py` and `test.py`. For things that should be diffe
 #↓↓↓↓
 #NOTE: forward pass
 img = data_dict['img'].to(device)
-scene_names = data_dict['scene_name']
-img_names = data_dict['img_name']
 intrins = data_dict['intrins'].to(device)
-
 ...
-
 pred_list = model(img, intrins=intrins, mode='test')
 norm_out = pred_list[-1]
 #↑↑↑↑

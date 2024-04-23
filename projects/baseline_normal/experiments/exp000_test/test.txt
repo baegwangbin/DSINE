@@ -1,0 +1,31 @@
+--exp_name exp000_test
+--exp_id test
+
+--NNET_architecture densedepth__B5__NF2048__down2__bilinear__BN
+--NNET_output_dim 4
+--NNET_output_type G
+
+--data_augmentation_hflip
+--data_augmentation_appear 2
+
+--diff_lr
+--loss_fn NLL_angmf
+
+--num_epochs 5
+--batch_size 4
+--workers 32
+--accumulate_grad_batches 4
+
+--input_height 480
+--input_width 640
+
+--gpus 0
+
+--dataset_name_train nyuv2
+--dataset_name_val nyuv2
+--train_split train
+--val_split test
+
+--validate_every 1000
+--visualize_every 1000
+

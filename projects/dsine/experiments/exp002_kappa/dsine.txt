@@ -1,0 +1,37 @@
+--exp_name exp002_kappa
+--exp_id dsine
+
+--NNET_architecture v02_kappa
+--NNET_encoder_B 5
+--NNET_decoder_NF 2048
+--NNET_decoder_down 8
+--NNET_learned_upsampling
+
+--NNET_output_dim 4
+--NNET_output_type G
+
+--NRN_prop_ps 5
+--NRN_num_iter_train 5
+--NRN_num_iter_test 5
+--NRN_ray_relu
+
+--data_augmentation_intrins
+--input_height 0
+--input_width 0
+--data_augmentation_hflip
+--data_augmentation_appear 2
+
+--diff_lr
+--loss_fn NLL_angmf
+
+--num_epochs 5
+--batch_size 4
+--workers 32
+--accumulate_grad_batches 4
+
+--gpus 0
+
+--validate_every 20000
+--visualize_every 10000
+
+--ckpt_path ./checkpoints/exp002_kappa/dsine.pt

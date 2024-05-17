@@ -20,7 +20,7 @@ Official implementation of the paper
 Despite the growing demand for accurate surface normal estimation models, existing methods use general-purpose dense prediction models, adopting the same inductive biases as other tasks. In this paper, we discuss the **inductive biases** needed for surface normal estimation and propose to **(1) utilize the per-pixel ray direction** and **(2) encode the relationship between neighboring surface normals by learning their relative rotation**. The proposed method can generate **crisp — yet, piecewise smooth — predictions** for challenging in-the-wild images of arbitrary resolution and aspect ratio. Compared to a recent ViT-based state-of-the-art model, our method shows a stronger generalization ability, despite being trained on an orders of magnitude smaller dataset.
 
 <p align="center">
-  <img width=100% src="https://github.com/baegwangbin/DSINE/raw/main/docs/img/fig_comparison.png">
+  <img width=100% src="https://github.com/baegwangbin/DSINE/raw/main/docs/img/fig_comparison_new.png">
 </p>
 
 ## Getting started

@@ -190,20 +190,19 @@ The test commands above (e.g. for getting the benchmark performance & running re
 If you want to make contributions to this repo, please make a pull request and add instructions in the following format.
 
 <details>
-<summary><b>Using torch hub to predict normal</b> (contribution by <a href="https://github.com/hugoycj" target="_blank">hugoycj</a>)</summary>
+<summary><b>Using torch hub to predict normal</b> (contribution by <a href="https://github.com/hugoycj" target="_blank">hugoycj</a>, updated by <a href="https://github.com/pierremerriaux-leddartech/DSINE" target="_blank">Pierre M.</a>)</summary>
 
-NOTE: the code below is deprecated and should be modified (as the folder structure has changed).
+
 
 ```
 import torch
 import cv2
 import numpy as np
+import sys
 
-# Load the normal predictor model from torch hub
-normal_predictor = torch.hub.load("hugoycj/DSINE-hub", "DSINE", trust_repo=True)
+normal_predictor = torch.hub.load("pierremerriaux-leddartech/DSINE", "DSINE", trust_repo=True, source='github')
 
-# Load the input image using OpenCV
-image = cv2.imread(args.input, cv2.IMREAD_COLOR)
+image = cv2.imread('projects/dsine/samples/img/office_01.png', cv2.IMREAD_COLOR)
 h, w = image.shape[:2]
 
 # Use the model to infer the normal map from the input image
@@ -216,13 +215,13 @@ normal = (normal * 255).cpu().numpy().astype(np.uint8).transpose(1, 2, 0)
 normal = cv2.cvtColor(normal, cv2.COLOR_RGB2BGR)
 
 # Save the output normal map to a file
-cv2.imwrite(args.output, normal)
+cv2.imwrite('projects/dsine/samples/img/office_01_result.png', normal)
 ```
 
 If the network is unavailable to retrieve weights, you can use local weights for torch hub as shown below:
 
 ```
-normal_predictor = torch.hub.load("hugoycj/DSINE-hub", "DSINE", local_file_path='./checkpoints/dsine.pt', trust_repo=True)
+normal_predictor = torch.hub.load("pierremerriaux-leddartech/DSINE", "DSINE", local_file_path='./checkpoints/dsine.pt', trust_repo=True)
 ```
 </details>
 

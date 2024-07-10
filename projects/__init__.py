@@ -3,10 +3,11 @@
 import os
 import argparse
 
-DATASET_DIR = '/media/gwangbin/ssd/datasets/'   # where datasets are stored         NOTE: this should be changed!
-EXPERIMENT_DIR = '/home/gwangbin/experiments/'  # where to save the experiments     NOTE: this should be changed!
+#DATASET_DIR = '/media/gwangbin/ssd/datasets/'   # where datasets are stored         NOTE: this should be changed!
+#EXPERIMENT_DIR = '/home/gwangbin/experiments/'  # where to save the experiments     NOTE: this should be changed!
 PROJECT_DIR = os.path.split(os.path.dirname(os.path.realpath(__file__)))[0]
-
+EXPERIMENT_DIR  = os.path.join(PROJECT_DIR, 'experiments')
+DATASET_DIR  = os.path.join(PROJECT_DIR, 'datasets')
 
 def get_default_parser():
     parser = argparse.ArgumentParser(fromfile_prefix_chars='@', conflict_handler='resolve')

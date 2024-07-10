@@ -20,7 +20,7 @@ def _load_state_dict(local_file_path: Optional[str] = None):
 
 class Predictor:
     def __init__(self, model) -> None:
-        from models.dsine import DSINE
+        from models.dsine import v02
         self.device = torch.device('cuda')
         self.model = model
         self.transform = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
@@ -32,33 +32,44 @@ class Predictor:
     
     def infer_pil(self, img, intrins=None):
         import utils.utils as utils
+        from utils.projection import intrins_from_fov, intrins_from_txt
         img = np.array(img).astype(np.float32) / 255.0
         img = torch.from_numpy(img).permute(2, 0, 1).unsqueeze(0).to(self.device)
         _, _, orig_H, orig_W = img.shape
 
         # zero-pad the input image so that both the width and height are multiples of 32
-        l, r, t, b = utils.pad_input(orig_H, orig_W)
-        img = F.pad(img, (l, r, t, b), mode="constant", value=0.0)
+        # l, r, t, b = utils.pad_input(orig_H, orig_W)
+        
+        lrtb = utils.get_padding(orig_H, orig_W)
+        img = F.pad(img, lrtb, mode="constant", value=0.0)
+      
+       
         img = self.transform(img)
 
         if intrins is None:
-            intrins = utils.get_intrins_from_fov(new_fov=60.0, H=orig_H, W=orig_W, device=self.device).unsqueeze(0)
+            intrins = intrins_from_fov(new_fov=60.0, H=orig_H, W=orig_W, device=self.device).unsqueeze(0)
         
-        intrins[:, 0, 2] += l
-        intrins[:, 1, 2] += t
+        intrins[:, 0, 2] += lrtb[0]
+        intrins[:, 1, 2] += lrtb[2]
 
         with torch.no_grad():
             pred_norm = self.model(img, intrins=intrins)[-1]
-            pred_norm = pred_norm[:, :, t:t+orig_H, l:l+orig_W]
+            pred_norm = pred_norm[:, :, lrtb[2]:lrtb[2]+orig_H, lrtb[0]:lrtb[0]+orig_W]
         
         # pred_norm_np = pred_norm.cpu().detach().numpy()[0,:,:,:].transpose(1, 2, 0) # (H, W, 3)
         return pred_norm
 
 def DSINE(local_file_path: Optional[str] = None):
-    from models import dsine
+    from models.dsine import v02
+    import projects.dsine.config as config
+    import sys
+    old_sys_argv = sys.argv
+    sys.argv = [old_sys_argv[0]] + [os.path.join(os.path.dirname(os.path.realpath(__file__)), 'projects/dsine/experiments/exp001_cvpr2024/dsine.txt')]
 
+    args = config.get_args(test=True)
+    #args.exp_root = os.path.join(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0], 'experiments')
     state_dict = _load_state_dict(local_file_path)
-    model = dsine.DSINE()
+    model = v02.DSINE_v02(args)
     model.load_state_dict(state_dict, strict=True)
     model.eval()
     model = model.to(torch.device("cuda"))
